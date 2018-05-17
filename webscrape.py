@@ -15,6 +15,7 @@ test2_con = []
 test3_con = []
 count = 0
 anscount = 1
+ctr = 2
 
 #getting the vote counts
 for vote_count in soup.find_all('div',{'class':'vote'}):
@@ -44,7 +45,7 @@ for test in soup.find_all('div',{'class':'user-action-time'}):
 count = 0
 while(count < len(test2_con)):
 	mainAD = {} #for account and date
-	mainAD['Account'] = test2_con[count]
+	mainAD['Name'] = test2_con[count]
 	mainAD['Date'] = test3_con[count]
 	tagsAD.append(mainAD)
 	count = count + 1
@@ -54,22 +55,21 @@ while(count < len(test2_con)):
 size_of_htmlpage_text = len(htmlpage_text)
 
 while (anscount < size_of_htmlpage_text):
+
 	mainAnswer = {}
 	mainAnswer['answer'] = htmlpage_text[anscount]
 	mainAnswer['Upvote '] = vote_container[anscount]
-
-	#for debugging
-	if(anscount >= 2):
-		myStr = tagsAD[anscount]['Date']
-		myStr2 = tagsAD[anscount+1]['Date']
-		if(myStr.find("edited") & myStr2.find("answered")):
-			print("found edited")
-			mainAnswer['edited by'] = tagsAD[anscount]
-			mainAnswer['answered by'] = tagsAD[anscount+1]
-		else:
-			mainAnswer['edited by'] = "N/A"
-			mainAnswer['answered by'] = tagsAD[anscount]
-	######################################################
+	if(anscount >= 1):
+                        myStr = tagsAD[ctr]['Date']
+                        if "edited" in myStr:
+                               mainAnswer['edited by'] = tagsAD[ctr]
+                               mainAnswer['answered by'] = tagsAD[ctr+1]
+                               ctr = ctr + 2
+                        else:
+                                mainAnswer['edited by'] = "N/A"
+                                mainAnswer['answered by'] = tagsAD[ctr]
+                                ctr = ctr + 1
+     
 	tags.append(mainAnswer)
 	anscount = anscount + 1
 
