@@ -53,6 +53,8 @@ if "https://stackoverflow.com/questions/" in URL:
 		tagsAD.append(mainAD)
 		count = count + 1
 
+
+
 	size_of_htmlpage_text = len(htmlpage_text)
 
 	while (anscount < size_of_htmlpage_text):
@@ -61,7 +63,7 @@ if "https://stackoverflow.com/questions/" in URL:
 
 		if(anscount != 0):
 			mainAnswer['answer'] = htmlpage_text[anscount]
-			mainAnswer['Upvote '] = vote_container[anscount])
+			mainAnswer['Upvote '] = vote_container[anscount]
 		if(anscount >= 1):
 			if(len(tagsAD) > 4):
 			        try:
@@ -77,6 +79,8 @@ if "https://stackoverflow.com/questions/" in URL:
 			        except IndexError:
 			                myStr = 'null'
 			else:
+			        
+			        
 			                myStr = tagsAD[anscount]['Date']
 			                if "edited" in myStr:
 			                        mainAnswer['edited by'] = tagsAD[anscount]
@@ -89,13 +93,13 @@ if "https://stackoverflow.com/questions/" in URL:
 			tags.append(mainAnswer)
 		anscount = anscount + 1
 
+
 	myStr = tagsAD[0]['Date']
 	if "edited" in myStr:
 	        ans_con['questions'] = {"title": soup.title.text, "Body": htmlpage_text[0], "Upvote": vote_container[0], "Edited by": tagsAD[0], "Asked By":tagsAD[1]}
 	else:
 	        ans_con['questions'] = {"title": soup.title.text, "Body": htmlpage_text[0], "Upvote": vote_container[0], "Edited by": "N/A", "Asked By":tagsAD[0]}
 	ans_con['answers'] = tags
-
 	with open("Nodejs.json","w") as newFile:
 		json.dump(ans_con, newFile, indent = 4)
 else:
