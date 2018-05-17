@@ -79,8 +79,6 @@ if "https://stackoverflow.com/questions/" in URL:
 			        except IndexError:
 			                myStr = 'null'
 			else:
-			        
-			        
 			                myStr = tagsAD[anscount]['Date']
 			                if "edited" in myStr:
 			                        mainAnswer['edited by'] = tagsAD[anscount]
