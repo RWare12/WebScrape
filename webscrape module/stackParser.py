@@ -13,7 +13,7 @@ def parse(URL):
         userDetails_Container = []
         dateContainer = []
         count = 0
-        anscount = 0
+        anscount = 1
         ctr = 2
 
         #getting the vote counts
@@ -56,35 +56,32 @@ def parse(URL):
         while (anscount < size_of_htmlpage_text):
 
             mainAnswer = {}
+            mainAnswer['answer'] = htmlpage_text[anscount]
+            mainAnswer['Upvote '] = vote_container[anscount]
 
-            if(anscount != 0):
-                mainAnswer['answer'] = htmlpage_text[anscount]
-                mainAnswer['Upvote '] = vote_container[anscount]
-            if(anscount >= 1):
-                if(len(initialOutputAD) > 4):
-                        try:
-                                myStr = initialOutputAD[ctr]['Date']
-                                if "edited" in myStr:
-                                        mainAnswer['edited by'] = initialOutputAD[ctr]
-                                        mainAnswer['answered by'] = initialOutputAD[ctr+1]
-                                        ctr = ctr + 2
-                                else:
-                                        mainAnswer['edited by'] = "N/A"
-                                        mainAnswer['answered by'] = initialOutputAD[ctr]
-                                        ctr = ctr + 1
-                        except IndexError:
-                                myStr = 'null'
-                else:
-                                myStr = initialOutputAD[anscount]['Date']
-                                if "edited" in myStr:
-                                        mainAnswer['edited by'] = initialOutputAD[anscount]
-                                        mainAnswer['answered by'] = initialOutputAD[anscount+1]
-                                        anscount = anscount + 1
-                                else:
-                                        mainAnswer['edited by'] = "N/A"
-                                        mainAnswer['answered by'] = initialOutputAD[anscount]
-            if (anscount != 0):
-                initialOutput.append(mainAnswer)
+            if(len(initialOutputAD) > 4):
+                    try:
+                            myStr = initialOutputAD[ctr]['Date']
+                            if "edited" in myStr:
+                                    mainAnswer['edited by'] = initialOutputAD[ctr]
+                                    mainAnswer['answered by'] = initialOutputAD[ctr+1]
+                                    ctr = ctr + 2
+                            else:
+                                    mainAnswer['edited by'] = "N/A"
+                                    mainAnswer['answered by'] = initialOutputAD[ctr]
+                                    ctr = ctr + 1
+                    except IndexError:
+                            myStr = 'null'
+            else:
+                            myStr = initialOutputAD[anscount]['Date']
+                            if "edited" in myStr:
+                                    mainAnswer['edited by'] = initialOutputAD[anscount]
+                                    mainAnswer['answered by'] = initialOutputAD[anscount+1]
+                                    anscount = anscount + 1
+                            else:
+                                    mainAnswer['edited by'] = "N/A"
+                                    mainAnswer['answered by'] = initialOutputAD[anscount]
+            initialOutput.append(mainAnswer)
             anscount = anscount + 1
 
 
