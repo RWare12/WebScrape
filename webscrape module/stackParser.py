@@ -6,7 +6,6 @@ def parse(URL):
         soup = BeautifulSoup(page, 'html.parser') # from url
         htmlpage_text = [] #container for html page
         finalMainAnswer = {} #container for answers
-        answers = []#container for answer
         vote_container = []#container for votes
         initialOutput = []#final output for question and answers
         initialOutputAD = [] #final output for Acc and Date
