@@ -27,7 +27,7 @@ if "https://stackoverflow.com/questions/" in URL:
 
 	#getting question and answers
 	for table in soup.find_all('div',{'class':'post-text'}):
-	    htmlpage_text.append(table.text)
+	    htmlpage_text.append(table.text.strip())
 
 	#code for accepted answers users
 	for test2 in soup.find_all('div',{'class':'user-details'}):
@@ -40,7 +40,7 @@ if "https://stackoverflow.com/questions/" in URL:
 	#code for the dates
 	for test in soup.find_all('div',{'class':'user-action-time'}):
 	        if (test2 is not None):
-	                dateContainer.append(test.text)
+	                dateContainer.append(test.text.strip())
 	        else:
 	                dateContainer.append("N/A")
 
