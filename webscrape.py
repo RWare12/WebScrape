@@ -9,13 +9,13 @@ if "https://stackoverflow.com/questions/" in URL:
 	page = req.urlopen(site)
 	soup = BeautifulSoup(page, 'html.parser') # from url
 	htmlpage_text = [] #container for html page
-	ans_con = {} #container for answers
+	finalMainAnswer = {} #container for answers
 	answers = []#container for answer
 	vote_container = []#container for votes
-	tags = []#final output for question and answers
-	tagsAD = [] #final output for Acc and Date
-	test2_con = []
-	test3_con = []
+	initialOutput = []#final output for question and answers
+	initialOutputAD = [] #final output for Acc and Date
+	userDetails_Container = []
+	dateContainer = []
 	count = 0
 	anscount = 0
 	ctr = 2
@@ -32,25 +32,25 @@ if "https://stackoverflow.com/questions/" in URL:
 	#code for accepted answers users
 	for test2 in soup.find_all('div',{'class':'user-details'}):
 		if (test2.a is not None):
-			test2_con.append(test2.a.text)
+			userDetails_Container.append(test2.a.text)
 		else:
-			test2_con.append("N/A")
+			userDetails_Container.append("N/A")
 
 
 	#code for the dates
 	for test in soup.find_all('div',{'class':'user-action-time'}):
 	        if (test2 is not None):
-	                test3_con.append(test.text)
+	                dateContainer.append(test.text)
 	        else:
-	                test3_con.append("N/A")
+	                dateContainer.append("N/A")
 
 	#creating object for account and date
 	count = 0
-	while(count < len(test2_con)):
+	while(count < len(userDetails_Container)):
 		mainAD = {} #for account and date
-		mainAD['Name'] = test2_con[count]
-		mainAD['Date'] = test3_con[count]
-		tagsAD.append(mainAD)
+		mainAD['Name'] = userDetails_Container[count]
+		mainAD['Date'] = dateContainer[count]
+		initialOutputAD.append(mainAD)
 		count = count + 1
 
 
@@ -65,40 +65,41 @@ if "https://stackoverflow.com/questions/" in URL:
 			mainAnswer['answer'] = htmlpage_text[anscount]
 			mainAnswer['Upvote '] = vote_container[anscount]
 		if(anscount >= 1):
-			if(len(tagsAD) > 4):
+			if(len(initialOutputAD) > 4):
 			        try:
-			                myStr = tagsAD[ctr]['Date']
+			                myStr = initialOutputAD[ctr]['Date']
 			                if "edited" in myStr:
-			                        mainAnswer['edited by'] = tagsAD[ctr]
-			                        mainAnswer['answered by'] = tagsAD[ctr+1]
+			                        mainAnswer['edited by'] = initialOutputAD[ctr]
+			                        mainAnswer['answered by'] = initialOutputAD[ctr+1]
 			                        ctr = ctr + 2
 			                else:
 			                        mainAnswer['edited by'] = "N/A"
-			                        mainAnswer['answered by'] = tagsAD[ctr]
+			                        mainAnswer['answered by'] = initialOutputAD[ctr]
 			                        ctr = ctr + 1
 			        except IndexError:
 			                myStr = 'null'
 			else:
-			                myStr = tagsAD[anscount]['Date']
+			                myStr = initialOutputAD[anscount]['Date']
 			                if "edited" in myStr:
-			                        mainAnswer['edited by'] = tagsAD[anscount]
-			                        mainAnswer['answered by'] = tagsAD[anscount+1]
+			                        mainAnswer['edited by'] = initialOutputAD[anscount]
+			                        mainAnswer['answered by'] = initialOutputAD[anscount+1]
 			                        anscount = anscount + 1
 			                else:
 			                        mainAnswer['edited by'] = "N/A"
-			                        mainAnswer['answered by'] = tagsAD[anscount]
+			                        mainAnswer['answered by'] = initialOutputAD[anscount]
 		if (anscount != 0):
-			tags.append(mainAnswer)
+			initialOutput.append(mainAnswer)
 		anscount = anscount + 1
 
 
-	myStr = tagsAD[0]['Date']
+	myStr = initialOutputAD[0]['Date']
 	if "edited" in myStr:
-	        ans_con['questions'] = {"title": soup.title.text, "Body": htmlpage_text[0], "Upvote": vote_container[0], "Edited by": tagsAD[0], "Asked By":tagsAD[1]}
+	        finalMainAnswer['questions'] = {"title": soup.title.text, "Body": htmlpage_text[0], "Upvote": vote_container[0], "Edited by": initialOutputAD[0], "Asked By":initialOutputAD[1]}
 	else:
-	        ans_con['questions'] = {"title": soup.title.text, "Body": htmlpage_text[0], "Upvote": vote_container[0], "Edited by": "N/A", "Asked By":tagsAD[0]}
-	ans_con['answers'] = tags
+	        finalMainAnswer['questions'] = {"title": soup.title.text, "Body": htmlpage_text[0], "Upvote": vote_container[0], "Edited by": "N/A", "Asked By":initialOutputAD[0]}
+	finalMainAnswer['answers'] = initialOutput
 	with open("Nodejs.json","w") as newFile:
-		json.dump(ans_con, newFile, indent = 4)
+		json.dump(finalMainAnswer, newFile, indent = 4)
+	print("Success!")
 else:
 	print("Can't handle URL")
